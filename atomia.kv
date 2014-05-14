@@ -1,0 +1,106 @@
+#: import Window kivy.core.window.Window
+<Welcome>:
+	blinking_text: blinking_text
+	Image:
+		size_hint: None, None
+		size: Window.size
+		source: 'graphics/background/background_welcome.jpg'
+		allow_stretch: True
+        keep_ratio: False
+	Label:
+		id: blinking_text
+		size_hint: None, None
+		pos_hint: {'center_x': 0.5, 'y':0.2}
+		text: ' TAP TO SKIP '
+		font_size: '20sp'
+
+<PuzzleGame>:
+	Label:
+		text: str(root.score)
+		font_size: '25sp'
+		pos: ((root.atom_size[0] + root.interval) * root.cols_max) + (root.atom_size[0] * 4) + 8, Window.height - root.y - (Window.height / 20) * 2
+		size_hint: None, None
+		height: Window.height / 20
+	Label:
+		text: root.nb_combi_find
+		font_size: '20sp'
+		pos: ((root.atom_size[0] + root.interval) * root.cols_max) + (root.atom_size[0] * 4) + 8, self.height + root.atom_size[0]
+		size_hint: None, None
+		height: Window.height / 20
+		
+<Principal>:
+	board_box: board_box
+	Image:
+		source: 'graphics/background/background_game.png'
+		allow_stretch: True
+		keep_ratio: False
+	
+	PuzzleGame:
+	
+	Button:
+		id: space
+		on_press: root.display_popup_restart()
+		background_normal:'graphics/buttons/restart.png'
+		size_hint: None, None
+		size: Window.height / 10, Window.height / 10
+								#Pour cette coordonnee y on utilise la meme coordonnee car les rows et cols sont a 8 si ca change il faudra change
+								#idem pour space, si la height des atomes vienne a varier de la width
+		pos: root.position_x + root.coordonnee_x + 4, root.position_y + (root.coordonnee_x / 2) - (self.height / 2)
+	Label:
+		id: text_score
+		text: 'SCORE'
+		font_size: '20sp'
+		pos: (root.position_x + root.coordonnee_x + space.width + 4, Window.height - root.position_y - self.height)
+		size_hint: None, None
+		#La fenetre - pos_x puzzle - espacement des bords - bouton restart 
+		size: Window.width - (root.position_x * 2) - root.coordonnee_x - space.width, Window.height / 20 
+	Label:
+		id: text_combi
+		text: 'COMBINAISON'
+		font_size: '20sp'
+		pos: (text_score.x, text_score.y - self.height * 2)
+		size_hint: None, None
+		size: text_score.width, Window.height / 20
+		
+	ScrollView:
+		id: scroll
+		pos: (text_score.x, text_combi.y - self.height - 10)
+		size_hint: None, None
+		size: text_score.width, Window.height / 2
+
+		do_scroll_x: False
+		GridLayout:
+			id: board_box
+			cols:1
+			#padding:10
+			spacing:10
+			size_hint: None, None
+			width: scroll.width
+	
+	Button:
+		text: 'FINISH'
+		font_size: '20sp'
+		pos: (text_score.x, root.position_y)
+		size_hint: None, None
+		size: text_score.width, Window.height / 20
+		on_press: root.display_exit_popup()
+		
+<PopupRestart>:
+	yes_button: yes_button
+	size_hint: None, None
+	size: Window.width / 2, Window.height / 2
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			text: 'Would you want to restart the game ?'
+			font_size: '20sp'
+			halign: 'center'
+		BoxLayout:
+			orientation: 'horizontal'
+			Button:
+				id: yes_button
+				text: 'YES'
+			Button:
+				text: 'NO'
+				on_press: root.dismiss()
+			
