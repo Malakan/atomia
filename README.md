@@ -14,10 +14,8 @@ To install Kivy on your computer, see the Kivy documentation at http://kivy.org/
 On Android:
 -----------
 
-Copy atomia.apk (available on this repo) on your phone or tablet and install it.
+Copy Atomia-1.0-debug.apk (available on this repo) on your phone or tablet and install it.
 
   WARNING: it is necessary to allow installation from unknown source on your phone.
 
-Or create atomia.apk yourself with python-for-android, available at https://github.com/kivy/python-for-android
-  
-  Read the README.rst
+Or create Atomia-1.0-debug.apk yourself with python-for-android, available at https://github.com/kivy/python-for-android
