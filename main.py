@@ -124,7 +124,7 @@ class Principal(FloatLayout):
 		path_img = glob(join(self.curdir, 'graphics', 'formulaboards', img))
 		absolute_path = "".join(path_img)
 		self.number_find += 1
-		self.nb_combi_find = str(self.number_find) + ' / ' + str(24)
+		self.nb_combi_find = str(self.number_find) + ' / ' + str(28)
 
 		for board in self.boards_list:
 			if absolute_path == board.source:
