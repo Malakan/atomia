@@ -31,7 +31,6 @@ from kivy.graphics import Rectangle, Line, Color
 from random import randint
 
 
-#Il est necessaire de mettre **kwargs pour pouvoir imbriquer PuzzleGame dans la classe Principal, sinon error
 class PuzzleGame(FloatLayout):
 	
 	atom_size = (0,0)
@@ -40,32 +39,26 @@ class PuzzleGame(FloatLayout):
 	
 	def __init__(self, **kwargs):
 		super(PuzzleGame, self).__init__(**kwargs)
-		
-		#Vu que cette classe est imbrique dans la principal il faut declare la position ici non dans le kv
-		# self.pos = (Window.width / 20, Window.height / 20)
-		#Pour pouvoir tracer un canvas bordure propre
-		
+
 		self.pos = (Window.height / 11, Window.height / 11)
 		
-		self.atoms_list = ['azote', 'carbone', 'chlore', 'hydrogene', 'oxygene', 'sodium']
-		au = ['bore', 'carbone', 'azote', 'oxygene', 'fluor', 'neon', 'sodium', 'magnesium',
-			'aluminium', 'silicium', 'phosphore', 'soufre', 'chlore', 'argon', 'potassium', 'calcium', 'titane', 'vanadium', 'manganese',
-			'fer', 'cobalt', 'nickel', 'cuivre', 'zinc', 'brome', 'argent', 'etain', 'iode', 'xenon', 'tungstene', 'platine',
-			'or', 'mercure']
-			
-		self.combinaisons_list = [{'hydrogene':2}, {'oxygene':2}, {'azote':2}, {'hydrogene':2, 'oxygene':1}, {'carbone':1, 'oxygene':2},
-			{'chlore':1, 'sodium':1}, {'hydrogene':2, 'oxygene':2}, {'carbone':2, 'hydrogene':2}, {'hydrogene':1, 'carbone':1, 'azote':1}, {'azote':1, 'hydrogene':3},
-			{'carbone':1, 'hydrogene':4}, {'carbone':2, 'hydrogene':6}, {'carbone':3, 'hydrogene':8}, {'carbone':4, 'hydrogene':10}, {'carbone':5, 'hydrogene':12},
-			{'carbone':6, 'hydrogene':14}, {'carbone':7, 'hydrogene':16}, {'carbone':8, 'hydrogene':18}, {'carbone':9, 'hydrogene':20},
-			{'carbone':10, 'hydrogene':22}, {'carbone':2, 'hydrogene':6, 'oxygene':1}, {'carbone':10, 'hydrogene':16, 'oxygene':1},
-			{'carbone':6, 'hydrogene':6}, {'carbone':2, 'hydrogene':4, 'oxygene':2}]
+		self.atoms_list = ['aluminium', 'azote', 'carbone', 'carbone', 'chlore', 'fer', 'hydrogene', 'hydrogene', 'oxygene', 'sodium']
 		
-		self.combinaisons_list_clone = [{'hydrogene':2}, {'oxygene':2}, {'azote':2}, {'hydrogene':2, 'oxygene':1}, {'carbone':1, 'oxygene':2},
+		self.combinaisons_list = [{'hydrogene':2}, {'oxygene':2}, {'oxygene':3}, {'azote':2}, {'hydrogene':2, 'oxygene':1}, {'carbone':1, 'oxygene':2},
 			{'chlore':1, 'sodium':1}, {'hydrogene':2, 'oxygene':2}, {'carbone':2, 'hydrogene':2}, {'hydrogene':1, 'carbone':1, 'azote':1}, {'azote':1, 'hydrogene':3},
 			{'carbone':1, 'hydrogene':4}, {'carbone':2, 'hydrogene':6}, {'carbone':3, 'hydrogene':8}, {'carbone':4, 'hydrogene':10}, {'carbone':5, 'hydrogene':12},
 			{'carbone':6, 'hydrogene':14}, {'carbone':7, 'hydrogene':16}, {'carbone':8, 'hydrogene':18}, {'carbone':9, 'hydrogene':20},
 			{'carbone':10, 'hydrogene':22}, {'carbone':2, 'hydrogene':6, 'oxygene':1}, {'carbone':10, 'hydrogene':16, 'oxygene':1},
-			{'carbone':6, 'hydrogene':6}, {'carbone':2, 'hydrogene':4, 'oxygene':2}]
+			{'carbone':6, 'hydrogene':6}, {'carbone':2, 'hydrogene':4, 'oxygene':2}, {'aluminium':2, 'oxygene':3}, {'fer':3, 'oxygene':4},
+			{'chlore':2}]
+		
+		self.combinaisons_list_clone = [{'hydrogene':2}, {'oxygene':2}, {'oxygene':3}, {'azote':2}, {'hydrogene':2, 'oxygene':1}, {'carbone':1, 'oxygene':2},
+			{'chlore':1, 'sodium':1}, {'hydrogene':2, 'oxygene':2}, {'carbone':2, 'hydrogene':2}, {'hydrogene':1, 'carbone':1, 'azote':1}, {'azote':1, 'hydrogene':3},
+			{'carbone':1, 'hydrogene':4}, {'carbone':2, 'hydrogene':6}, {'carbone':3, 'hydrogene':8}, {'carbone':4, 'hydrogene':10}, {'carbone':5, 'hydrogene':12},
+			{'carbone':6, 'hydrogene':14}, {'carbone':7, 'hydrogene':16}, {'carbone':8, 'hydrogene':18}, {'carbone':9, 'hydrogene':20},
+			{'carbone':10, 'hydrogene':22}, {'carbone':2, 'hydrogene':6, 'oxygene':1}, {'carbone':10, 'hydrogene':16, 'oxygene':1},
+			{'carbone':6, 'hydrogene':6}, {'carbone':2, 'hydrogene':4, 'oxygene':2}, {'aluminium':2, 'oxygene':3}, {'fer':3, 'oxygene':4},
+			{'chlore':2}]
 		
 		rows_list = [8,8,8,8,8,8,8,8]
 		self.rows_max = len(rows_list)
@@ -74,10 +67,8 @@ class PuzzleGame(FloatLayout):
 		for i in rows_list:
 			if i > self.cols_max:
 				self.cols_max = i
-		# print(self.cols_max)
 			
 		self.atom_size = (Window.height / 10, Window.height / 10)
-		# self.interval = ((Window.width / 100) / 2) / 4
 		self.interval = 1
 		atom_pos = self.pos
 		self.widgets_list = []
@@ -86,18 +77,8 @@ class PuzzleGame(FloatLayout):
 		self.current_touch_widgets = []
 		self.user_combinaison_clone = {}
 		counter = 0
-		#On defini la taille du widget qui contient le puzzle
-		# self.size_hint = (None, None)
-		# self.width = (self.atom_size[0] + self.interval) * self.cols_max
-		# self.height = (self.atom_size[0] + self.interval) * self.rows_max
-		# self.add_widget(restart_button)
-		#On place le contour du puzzle
-		# contour = Image(source='graphics/bordures/contour.png',allow_stretch=True, keep_ratio=False, pos=(0,0), size_hint=(None, None), size=(self.width + (self.x * 2),self.height + (self.y * 2)))
-		# self.add_widget(contour)
-		# print("SIZE IMAGE", contour.size, contour.pos)
-		
+
 		for i in rows_list:
-			#decalage en x si le puzzle a des colonnes de taille differentes
 			decalage = ((self.cols_max - i) / 2) * (self.atom_size[0] + self.interval)
 			atom_pos = (atom_pos[0] + decalage, atom_pos[1])
 			
@@ -114,97 +95,61 @@ class PuzzleGame(FloatLayout):
 					Line(rectangle=(img.x, img.y, img.width, img.height))
 				
 				atom_pos = (atom_pos[0] + self.atom_size[0] + self.interval, atom_pos[1])
-				# print('KLZJHJZHKJZHJZHJZ', atom_pos, self.interval)
 				counter += 1
 				
 			atom_pos = (self.x, atom_pos[1] + self.atom_size[1] + self.interval)
 			counter = 0
-			
-		'''with self.canvas:
-			# 0.2 de moins que la position du Floatlayout
-			c_x = (Window.width * (0.8*100)) / 100
-			c_y = (Window.height * (0.8*100)) / 100
-			c_wh = (self.atom_size[0] * self.cols_max) + ((self.cols_max -1) * self.interval)
-			c_ht = (self.atom_size[1] * rows_max)  + ((rows_max -1) * self.interval)
-			Line(rectangle=(self.x, self.y, c_wh, c_ht))'''
-			
+
 	def on_touch_down(self, touch):
+
 		for i in self.widgets_list:
 			if i in self.current_touch_widgets:
 				break
-			#print('self.widgets_list_clone', len(self.widgets_list_clone), len(self.widgets_list)) 
 			if i.collide_point(touch.x, touch.y):
 				self.user_combinaison[i.source[15:-4]] = 1
 				self.widgets_list_clone.remove(i)
 				with i.canvas:
 					Color(0.6, 0.8, 0.5)
 					Line(rectangle=(i.x, i.y, i.width, i.height))
-				#On enregistre avec le canvas modifie
 				self.current_touch_widgets.append(i)
 				break
 				
 	def on_touch_move(self, touch):
 		for i in self.widgets_list_clone:
-			#si on est deja passe sur le widget (i) on stop la.
 			if i in self.current_touch_widgets:
 				break
 			elif i.collide_point(touch.x, touch.y):
 				pos_i = ([i.x, i.y])
 				if pos_i == ([(self.current_touch_widgets[-1].x - i.size[0] - self.interval), (self.current_touch_widgets[-1].y)]):
-					# print((self.current_touch_widgets[-1].x - i.size[0] - self.interval) , (self.current_touch_widgets[-1].y), pos_i)
-					print('ca marche!!!!!!!!!!!!!')
-					# print(self.current_touch_widgets[-1].x, i.size[0], i.size[1], self.interval, self.current_touch_widgets[-1].y)
+					pass
 				elif pos_i == ([(self.current_touch_widgets[-1].x + i.size[0] + self.interval), (self.current_touch_widgets[-1].y)]):
-					# print((self.current_touch_widgets[-1].x + i.size[0] + self.interval), (self.current_touch_widgets[-1].y), pos_i)
-					# print(self.current_touch_widgets[-1].x, i.size[0], i.size[1], self.interval, self.current_touch_widgets[-1].y)
-					print('ca marche!!!!!!!!!!!!!')
+					pass
 				elif pos_i == ([self.current_touch_widgets[-1].x, (self.current_touch_widgets[-1].y + i.size[1] + self.interval)]):
-					# print((self.current_touch_widgets[-1].x), (self.current_touch_widgets[-1].y + i.size[0] + self.interval), pos_i)
-					# print(self.current_touch_widgets[-1].x, i.size[0], i.size[1], self.interval, self.current_touch_widgets[-1].y)
-					print('ca marche!!!!!!!!!!!!!')
+					pass
 				elif pos_i == ([self.current_touch_widgets[-1].x, (self.current_touch_widgets[-1].y - i.size[1] - self.interval)]): 
-					# print((self.current_touch_widgets[-1].x), (self.current_touch_widgets[-1].y - i.size[0] - self.interval), pos_i)
-					# print(self.current_touch_widgets[-1].x, i.size[0], i.size[1], self.interval, self.current_touch_widgets[-1].y)
-					print('ca marche!!!!!!!!!!!!!')
+					pass
 				else:
-					# print((self.current_touch_widgets[-1].x - i.size[0] - self.interval), (self.current_touch_widgets[-1].y))
-					# print((self.current_touch_widgets[-1].x))
-					# print((self.current_touch_widgets[-1].x + i.size[0] + self.interval), (self.current_touch_widgets[-1].y))
-					# print((self.current_touch_widgets[-1].x), (self.current_touch_widgets[-1].y + i.size[0] + self.interval))
-					# print((self.current_touch_widgets[-1].x), (self.current_touch_widgets[-1].y - i.size[0] - self.interval))
-					# print(pos_i, 'pos', 'ca marche pas')
-					# print(self.current_touch_widgets[-1].x, i.size[0], i.size[1], self.interval, self.current_touch_widgets[-1].y)
 					break
 
-				#sinon on continue
 				self.user_combinaison_clone = dict(self.user_combinaison)
 				if i.source[15:-4] in self.user_combinaison.keys():
 					self.user_combinaison_clone[i.source[15:-4]] += 1
 				else:
 					self.user_combinaison_clone[i.source[15:-4]] = 1
-				# print('clone', self.user_combinaison_clone, 'pas clone', self.user_combinaison)
-				
-				# print(data)
 			
 				for combinaison in self.combinaisons_list:
 					pf = self.user_combinaison_clone.keys()
 					pf.sort()
 					counter = 0
 					data = 0
-					# print('my combi', pf, 'combi', combinaison.keys())
 					for element in pf:
 						if element in combinaison:
 							counter +=1
 					if counter == len(pf):
-						# print('ca passe')
 						for atome_touche in pf:
-							# print(self.user_combinaison_clone[atome_touche], combinaison[atome_touche])
 							if self.user_combinaison_clone[atome_touche] <= combinaison[atome_touche]:
-								('atome + nombre match')
 								data += 1
-							# print('TAILLE DE MES COMBINAISONS', len(self.user_combinaison_clone), 'DATA', data)
 							if data == len(self.user_combinaison_clone):
-								# print('les atomes touches sont OK')
 								self.widgets_list_clone.remove(i)
 								with i.canvas:
 									Color(0.6, 0.8, 0.5)
@@ -221,8 +166,6 @@ class PuzzleGame(FloatLayout):
 							
 					elif data == len(self.user_combinaison_clone):
 							break
-					else:
-						print('match pas')
 						
 				if data == len(self.user_combinaison_clone):
 					break
@@ -233,80 +176,71 @@ class PuzzleGame(FloatLayout):
 		key_user_combinaison = self.user_combinaison.keys()
 		key_user_combinaison.sort()
 		for combinaison in self.combinaisons_list:
-			#Il est necessaire de faire un sort sur combinaison pour que ce soit dans le meme ordre
 			key_combinaison = combinaison.keys()
 			key_combinaison.sort()
-			print(key_user_combinaison, key_combinaison, combinaison, 'a et combi keys')
 			counter = 0
 			val = 0
 			if key_user_combinaison == key_combinaison:
 				name_combinaison = str()
 				for element in key_user_combinaison:
-					#on reforme le nom qui correspond au nom de l'image du tableau
 					if element == 'sodium':
 						symbole = 'na'
 					elif element == 'azote':
 						symbole = 'n'
 					elif element == 'clhore':
 						symbole = 'cl'
+					elif element == 'clhore':
+						symbole = 'fe'
+					elif element == 'clhore':
+						symbole = 'al'
 					else:
 						symbole = element[:1]
 					name_combinaison += ''.join(symbole) + ''.join(str(self.user_combinaison[element]))
-					print('NAME SOURCE', name_combinaison, symbole)
 					val += 1
-					print('c quoi ce truc,', self.user_combinaison[element], combinaison[element]) 
 					if self.user_combinaison[element] == combinaison[element]:
-						print('final', key_user_combinaison, key_combinaison)
 						counter += 1
-						print(counter, val, element, len(key_user_combinaison))
 						
 						if counter == len(key_user_combinaison):
 							self.remove_widgets_list = []
 							self.x_list = []
-							#Liste qui contient les points qui s'affiche, qui doivent etre efface
 							self.erase_points_list = []
-							#On supprime les widgets qui ont formes une combinaison
+
+							wid_formula = Image(source='graphics/formulas/%s.png' % name_combinaison, size_hint=(None, None), pos=self.current_touch_widgets[-1].pos)
+							self.add_widget(wid_formula)
+							self.erase_points_list.append(wid_formula)
+							anim_formula = Animation(y=(self.current_touch_widgets[-1].y - wid_formula.height), d=1.5)
+							anim_formula.start(wid_formula)
+
 							for wid in self.current_touch_widgets:			
-								#Si jamais il y a deux meme pos dans la liste
-								# if wid.pos in self.remove_widgets_list or wid.pos == self.remove_widgets_list:
-									# pass
 								self.remove_widgets_list.append(wid.pos)
 								self.remove_widget(wid)
 								self.x_list.append(wid.x)
-								#Mise a jour du score
+
 								parent.update_score(2)
-								#creation du widget point + animation + schedule pour effacer
+
 								wid_point = Label(text="+2", font_size='20sp', size_hint=(None, None), pos=wid.pos)
 								self.add_widget(wid_point)
 								self.erase_points_list.append(wid_point)
-								anim = Animation(y=wid.y+10, d=1)
-								anim.start(wid_point)
-								Clock.schedule_once(self.erase_points, 1)
-								#Combinaisons
+								anim_point = Animation(y=wid.y+5, d=1.5)
+								anim_point.start(wid_point)
+								
+								Clock.schedule_once(self.erase_points, 1.5)
 								for clone_combi in self.combinaisons_list_clone:
 									if combinaison == clone_combi:
-										#Mise a jour du nombre de combinaison trouvees
-										#Modification du canvas de la formule trouvee
 										self.combinaisons_list_clone.remove(combinaison)
 										
-										parent.draw_board(name_combinaison)
+										parent.draw_line_board(name_combinaison)
 								
-							#On les supprime egalement de la liste qui contient les pieces du puzzle
 							self.widgets_list = list(self.widgets_list_clone)
-							#On deplace les pieces vers le bas
 							self.move_puzzle_pieces()
-							# self.move_puzzle_pieces()
 
-							#Il y a une seule combinaison gagnante a moins d'integrer des joker pour enchainer sur d'autre formule d'atomes
 							break
 						
 						elif val == len(key_user_combinaison):
-							print('en fait ca match pas', val, counter)
 							val = 0
 							counter = 0
 						
 					elif val == len(key_user_combinaison):
-						print('en fait ca match pas', val, counter)
 						val = 0
 						counter = 0
 					
@@ -314,7 +248,6 @@ class PuzzleGame(FloatLayout):
 					break
 		
 		if counter == 0:
-			#si la combinaison n'est pas bonne, on supprime les canvas dessine
 			for touch_widget in self.current_touch_widgets:
 				with touch_widget.canvas:
 					Color(0, 0, 0)
@@ -324,45 +257,25 @@ class PuzzleGame(FloatLayout):
 		self.user_combinaison = {}
 		self.current_touch_widgets = []
 		self.widgets_list_clone = list(self.widgets_list)
-		print('leve le doligt', 'clone',len(self.widgets_list_clone), 'pas clone', len(self.widgets_list))
 		
 	def move_puzzle_pieces(self):
-		move_widgets_list = []	#Liste qui contiendra les widgets qui doivent descendre
+		move_widgets_list = []
 		counter = 0
+
 		for position in self.remove_widgets_list:
 			for piece in self.widgets_list:
 				if piece.pos[0] == position[0] and piece.pos[1] > position[1]:
-					#Si le x de la piece est egale au x de la piece supprime
-					# et que le y de la piece est superieur au y de la piece supprime
-					#c'est que les pieces sont dans la meme colonnes et qu'elles sont au dessus de celle supprime
-					# print('on bouge cette piece', piece.pos[0], position[0], piece.pos[1], position[1])
-					move_widgets_list.append(piece) #On enregistre les pieces qui descendent
+					move_widgets_list.append(piece)
 					
-
 		for piece in move_widgets_list:
-			# print('position piece avant anim', piece.pos)
-			#anim = Animation(pos=(piece.x, piece.y - piece.size[1] - self.interval), d=0.5)
-			#anim.start(piece)
 			piece.pos = (piece.x, piece.y - piece.size[1] - self.interval)
 			with piece.canvas:
 				Color(0, 0, 0)
 				Line(rectangle=(piece.x, piece.y, piece.width, piece.height))
-			# print('position piece apres anim', piece.pos)
-		
-		#Boucle qui permet de verifier que les positions modifier dans la boucle au dessus
-		#sont bien modifie egalement dans la widgets_list principale
-		# for piece in move_widgets_list:
-			# for elem in self.widgets_list:
-				# if elem == piece:
-					# print('tout est OK', piece.pos, elem.pos)
-						
 			
 		values_x = []
-		#Nombre de fois ou x a la meme valeur sur 6 colonne maxi etant donne que 6 est le maximum d'atome pour former une combinaison
-		#La combinaison serait donc de la forme de 6 atomes a l'horizontal donc 6 colonnes 6 valeurs de x differentes
 		
 		for x in self.x_list:
-			# print('liste des x', self.x_list)
 			if counter >= 1:
 				if x == old_x:
 					values_x[(counter-1)][str(old_x)] += 1
@@ -372,26 +285,17 @@ class PuzzleGame(FloatLayout):
 			else:
 				values_x.append({str(x):1})
 				counter = 1
-			# print('liste des dicos', values_x)
-			#On cherche a savoir si les pieces supprimees sont dans la meme colonne ou pas
-			#pour agir differemment si elles sont dans des colonnes differentes
 			old_x = x
 
 		self.coord_y = self.y + (self.rows_max * self.atom_size[1]) + (self.rows_max * self.interval)
-		#coordonnee y de la piece la plus haute
 		for dico in values_x:
-			#On recupere le nombre de fois que la valeur de dico.keys apparait
 			nb = dico.values()
 			nb_fin = int(nb[0])
 			counter = 0
 			nb_fin_size = nb_fin
 			while counter != nb_fin:
-				# print('counter nb fin', counter, nb_fin)
-				#On recupere la valeur de dico.keys
 				cord_x = dico.keys()
 				self.coord_x = int(cord_x[0])
-				# print(self.coord_x, 'coord_x', self.coord_y, 'coord_y')
-				#On ajoute un atome qui apparait tout en haut
 				rand_number = randint(0, len(self.atoms_list) -1)
 				image_path = 'graphics/atoms/' + self.atoms_list[rand_number] + '.png'
 				self.img = Image(source=image_path, pos=(self.coord_x, self.coord_y), size_hint=(None, None), size=piece.size)
@@ -403,9 +307,7 @@ class PuzzleGame(FloatLayout):
 				if nb_fin_size <= 0:
 					nb_fin_size = 1
 				t=0
-				# print(self.img.y, 'coord y', 'coord y a atteindre', self.coord_y - (self.atom_size[1] * nb_fin_size) - (self.interval * nb_fin_interval))
 				self.img.y -= (self.atom_size[1] + self.interval) * nb_fin_size
-				print('after', self.img.y)
 				counter += 1
 			
 				nb_fin_size -= 1

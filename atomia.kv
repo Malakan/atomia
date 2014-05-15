@@ -19,22 +19,21 @@
 
 
 #: import Window kivy.core.window.Window
-#: import PuzzleGame puzzle.PuzzleGame
 
 <Welcome>:
 	blinking_text: blinking_text
 	Image:
 		size_hint: None, None
 		size: Window.size
-		source: 'graphics/background/background_welcome.jpg'
+		source: 'graphics/background/background_welcome.png'
 		allow_stretch: True
         keep_ratio: False
 	Label:
 		id: blinking_text
 		size_hint: None, None
-		pos_hint: {'center_x': 0.5, 'y':0.2}
+		pos_hint: {'center_x': 0.5, 'center_y':0.5}
 		text: ' TAP TO SKIP '
-		font_size: '20sp'
+		font_size: '40sp'
 
 <PuzzleGame>:
 	
@@ -54,8 +53,6 @@
 		background_normal:'graphics/buttons/restart.png'
 		size_hint: None, None
 		size: Window.height / 10, Window.height / 10
-								#Pour cette coordonnee y on utilise la meme coordonnee car les rows et cols sont a 8 si ca change il faudra change
-								#idem pour space, si la height des atomes vienne a varier de la width
 		pos: root.position_x + root.coordonnee_x + 4, root.position_y + (root.coordonnee_x / 2) - (self.height / 2)
 	
 	Label:
@@ -70,11 +67,9 @@
 	Label:
 		text: str(root.score)
 		font_size: '25sp'
-		#prendre en compte la pos du parent (puzzlegame) le widget ne demarre pas a 0 mais a la position du pere
 		pos: text_score.x, text_score.y - self.height
 		size_hint: None, None
 		size: text_score.width, Window.height / 20
-		#height: Window.height / 20	
 		
 	Label:
 		id: text_combi
@@ -88,7 +83,7 @@
 		id: scroll
 		pos: (text_score.x, text_combi.y - self.height - 10)
 		size_hint: None, None
-		size: text_score.width, Window.height / 2
+		size: text_score.width, Window.height / 2 + text_combi.height  
 
 		do_scroll_x: False
 		GridLayout:
@@ -102,7 +97,7 @@
 	Label:
 		text: root.nb_combi_find
 		font_size: '20sp'
-		pos: (text_score.x, root.position_y + self.height)
+		pos: text_score.x, root.position_y + self.height
 		size_hint: None, None
 		size: text_score.width, Window.height / 20
 	
@@ -116,8 +111,8 @@
 		
 <PopupRestart>:
 	yes_button_restart: yes_button_restart
-	size_hint: None, None
-	size: Window.width / 2, Window.height / 2
+	size_hint: 0.8, None
+	height: Window.height / 2
 	title: 'RESTART GAME'
 	BoxLayout:
 		orientation: 'vertical'
@@ -136,8 +131,8 @@
 				
 <PopupExit>:
 	yes_button_exit: yes_button_exit
-	size_hint: None, None
-	size: Window.width / 2, Window.height / 2
+	size_hint: 0.8, None
+	height: Window.height / 2
 	title: 'RESTART GAME'
 	BoxLayout:
 		orientation: 'vertical'

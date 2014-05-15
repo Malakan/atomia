@@ -94,14 +94,13 @@ class Principal(FloatLayout):
 		self.boards_list = []
 		self.board_box.bind(minimum_height=self.board_box.setter('height'))
 		
-		#Coordonnee pour le kv
 		self.coordonnee_x = ((PuzzleGame().atom_size[0] + PuzzleGame().interval) * PuzzleGame().cols_max)
-		self.space = PuzzleGame().atom_size[0] 
+		self.space = PuzzleGame().atom_size[0]
 		self.position_x = PuzzleGame().x
 		self.position_y = PuzzleGame().y
-		self.path = dirname(__file__) + '\\graphics\\formulaboards'
+		self.curdir = dirname(__file__)
 		
-		for board_name in glob(join(self.path, '*')):
+		for board_name in glob(join(self.curdir, 'graphics', 'formulaboards', '*')):
 			board = Image(allow_stretch=True, keep_ratio=False, source=board_name, size_hint=(None, None), size=(self.board_box.width, Window.height / 10))
 			self.board_box.add_widget(board)
 			self.boards_list.append(board)
@@ -120,12 +119,14 @@ class Principal(FloatLayout):
 	def update_score(self, nb):
 		self.score += nb
 		
-	def draw_board(self, name):
+	def draw_line_board(self, name):
+		img = name + '.png'
+		path_img = glob(join(self.curdir, 'graphics', 'formulaboards', img))
+		absolute_path = "".join(path_img)
 		self.number_find += 1
 		self.nb_combi_find = str(self.number_find) + ' / ' + str(24)
+
 		for board in self.boards_list:
-			absolute_path = self.path + '\\' + name + '.png'
-			
 			if absolute_path == board.source:
 				with board.canvas.after:
 					Line(width=1.5, bezier=(board.x, board.y + board.height /2, board.x + board.width, board.y + board.height /2))
@@ -133,7 +134,7 @@ class Principal(FloatLayout):
 				
 	def display_exit_popup(self):
 		popup_exit = PopupExit()
-		popup_exit.yes_button_exit.bind(on_press=App().stop())
+		# popup_exit.yes_button_exit.bind(on_press=App().stop())
 		popup_exit.open()
 
 
