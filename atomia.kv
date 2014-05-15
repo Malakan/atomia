@@ -1,4 +1,26 @@
+# Atomia
+
+# Copyright (C) 2014  Stacy Maillot
+
+# This file is part of Atomia.
+
+# Atomia is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Atomia is distributed in the hope that it will be fun,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Atomia.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #: import Window kivy.core.window.Window
+#: import PuzzleGame puzzle.PuzzleGame
+
 <Welcome>:
 	blinking_text: blinking_text
 	Image:
@@ -15,18 +37,7 @@
 		font_size: '20sp'
 
 <PuzzleGame>:
-	Label:
-		text: str(root.score)
-		font_size: '25sp'
-		pos: ((root.atom_size[0] + root.interval) * root.cols_max) + (root.atom_size[0] * 4) + 8, Window.height - root.y - (Window.height / 20) * 2
-		size_hint: None, None
-		height: Window.height / 20
-	Label:
-		text: root.nb_combi_find
-		font_size: '20sp'
-		pos: ((root.atom_size[0] + root.interval) * root.cols_max) + (root.atom_size[0] * 4) + 8, self.height + root.atom_size[0]
-		size_hint: None, None
-		height: Window.height / 20
+	
 		
 <Principal>:
 	board_box: board_box
@@ -46,6 +57,7 @@
 								#Pour cette coordonnee y on utilise la meme coordonnee car les rows et cols sont a 8 si ca change il faudra change
 								#idem pour space, si la height des atomes vienne a varier de la width
 		pos: root.position_x + root.coordonnee_x + 4, root.position_y + (root.coordonnee_x / 2) - (self.height / 2)
+	
 	Label:
 		id: text_score
 		text: 'SCORE'
@@ -54,6 +66,16 @@
 		size_hint: None, None
 		#La fenetre - pos_x puzzle - espacement des bords - bouton restart 
 		size: Window.width - (root.position_x * 2) - root.coordonnee_x - space.width, Window.height / 20 
+		
+	Label:
+		text: str(root.score)
+		font_size: '25sp'
+		#prendre en compte la pos du parent (puzzlegame) le widget ne demarre pas a 0 mais a la position du pere
+		pos: text_score.x, text_score.y - self.height
+		size_hint: None, None
+		size: text_score.width, Window.height / 20
+		#height: Window.height / 20	
+		
 	Label:
 		id: text_combi
 		text: 'COMBINAISON'
@@ -76,6 +98,13 @@
 			spacing:10
 			size_hint: None, None
 			width: scroll.width
+			
+	Label:
+		text: root.nb_combi_find
+		font_size: '20sp'
+		pos: (text_score.x, root.position_y + self.height)
+		size_hint: None, None
+		size: text_score.width, Window.height / 20
 	
 	Button:
 		text: 'FINISH'
@@ -86,19 +115,40 @@
 		on_press: root.display_exit_popup()
 		
 <PopupRestart>:
-	yes_button: yes_button
+	yes_button_restart: yes_button_restart
 	size_hint: None, None
 	size: Window.width / 2, Window.height / 2
+	title: 'RESTART GAME'
 	BoxLayout:
 		orientation: 'vertical'
 		Label:
-			text: 'Would you want to restart the game ?'
+			text: 'Would you want to restart all the game ?'
 			font_size: '20sp'
 			halign: 'center'
 		BoxLayout:
 			orientation: 'horizontal'
 			Button:
-				id: yes_button
+				id: yes_button_restart
+				text: 'YES'
+			Button:
+				text: 'NO'
+				on_press: root.dismiss()
+				
+<PopupExit>:
+	yes_button_exit: yes_button_exit
+	size_hint: None, None
+	size: Window.width / 2, Window.height / 2
+	title: 'RESTART GAME'
+	BoxLayout:
+		orientation: 'vertical'
+		Label:
+			text: 'Do you want to quit Atomia ?'
+			font_size: '20sp'
+			halign: 'center'
+		BoxLayout:
+			orientation: 'horizontal'
+			Button:
+				id: yes_button_exit
 				text: 'YES'
 			Button:
 				text: 'NO'

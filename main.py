@@ -1,9 +1,31 @@
+'''
+Atomia
+
+Copyright (C) 2014  Stacy Maillot
+
+This file is part of Atomia.
+
+Atomia is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Atomia is distributed in the hope that it will be fun,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Atomia.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.core.image import Image as CoreImage
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup
 from kivy.uix.modalview import ModalView
 from kivy.clock import Clock
 from kivy.animation import Animation
@@ -59,24 +81,34 @@ class Principal(FloatLayout):
 	position_x = NumericProperty()
 	position_y = NumericProperty()
 	
-	def __init__(self):
-		super(Principal, self).__init__()
-
+	score = NumericProperty()
+	nb_combi_find = StringProperty()
+	
+	def __init__(self, **kwargs):
+		super(Principal, self).__init__(**kwargs)
+		
+		self.score = int()
+		
+		self.number_find = 0
+		self.nb_combi_find = str(self.number_find) + ' / ' + str(24)
+		self.boards_list = []
 		self.board_box.bind(minimum_height=self.board_box.setter('height'))
 		
+		#Coordonnee pour le kv
 		self.coordonnee_x = ((PuzzleGame().atom_size[0] + PuzzleGame().interval) * PuzzleGame().cols_max)
 		self.space = PuzzleGame().atom_size[0] 
 		self.position_x = PuzzleGame().x
 		self.position_y = PuzzleGame().y
-		curdir = dirname(__file__)
+		self.path = dirname(__file__) + '\\graphics\\formulaboards'
 		
-		for board_name in glob(join(curdir, 'graphics\\formulaboards', '*')):
+		for board_name in glob(join(self.path, '*')):
 			board = Image(allow_stretch=True, keep_ratio=False, source=board_name, size_hint=(None, None), size=(self.board_box.width, Window.height / 10))
 			self.board_box.add_widget(board)
-			
+			self.boards_list.append(board)
+	
 	def display_popup_restart(self):
 		self.popup_restart = PopupRestart()
-		self.popup_restart.yes_button.bind(on_press=self.restart)
+		self.popup_restart.yes_button_restart.bind(on_press=self.restart)
 		self.popup_restart.open()
 	
 	def restart(self, *args):
@@ -85,15 +117,35 @@ class Principal(FloatLayout):
 		self.popup_restart.dismiss()
 		parent.add_widget(Principal())
 		
-	def display_exit_popup(self):
-		print('ok')
-
-
-class PopupRestart(ModalView):
-	yes_button = ObjectProperty()
+	def update_score(self, nb):
+		self.score += nb
 		
+	def draw_board(self, name):
+		self.number_find += 1
+		self.nb_combi_find = str(self.number_find) + ' / ' + str(24)
+		for board in self.boards_list:
+			absolute_path = self.path + '\\' + name + '.png'
+			
+			if absolute_path == board.source:
+				with board.canvas.after:
+					Line(width=1.5, bezier=(board.x, board.y + board.height /2, board.x + board.width, board.y + board.height /2))
+				break
+				
+	def display_exit_popup(self):
+		popup_exit = PopupExit()
+		popup_exit.yes_button_exit.bind(on_press=App().stop())
+		popup_exit.open()
+
+
+class PopupRestart(Popup):
+	yes_button_restart = ObjectProperty()
+	
+class PopupExit(Popup):
+	yes_button_exit = ObjectProperty()
 
 class AtomiaApp(App):
+	title = 'Atomia'
+    # icon = 'icon.png'
 	my_time = NumericProperty()
 	
 	def build(self):
